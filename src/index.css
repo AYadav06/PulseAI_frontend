@@ -50,13 +50,13 @@
 
 :root {
     --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0.008 326);
+    --foreground: oklch(14.451% 0.00469 263.82);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0.008 326);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0.008 326);
     --primary: oklch(0.212 0.019 322.12);
-    --primary-foreground: oklch(0.985 0 0);
+    --primary-foreground: oklch(67.247% 0.11921 217.567);
     --secondary: oklch(0.96 0.003 325.6);
     --secondary-foreground: oklch(0.212 0.019 322.12);
     --muted: oklch(0.96 0.003 325.6);
@@ -117,6 +117,22 @@
     --sidebar-ring: oklch(0.542 0.034 322.5);
 }
 
+.chat-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.45);
+  border-radius: 999px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 120, 120, 0.75);
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -128,3 +144,5 @@
     @apply font-sans;
     }
 }
+
+

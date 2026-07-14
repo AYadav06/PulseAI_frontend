@@ -1,5 +1,7 @@
 import type { Conversation } from "@/lib/types";
-import { MessageSquare, PanelLeftClose, Plus, Trash2, Zap } from "lucide-react";
+import { MessageSquare, PanelLeftClose, Plus, Trash2} from "lucide-react";
+import logo2 from "../assets/logo2.svg"
+import { Logo } from "@/assets/logo";
 
 interface SidebarProps {
   open: boolean;
@@ -30,18 +32,18 @@ export function Sidebar({
     >
       {/* Brand */}
       <div className="flex items-center justify-between px-4 py-4">
-        <div className="flex items-center gap-2.5">
-          <div className="agent-glow flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600">
-            <Zap className="h-4.5 w-4.5 text-primary-foreground" fill="currentColor" />
+        <div className="flex items-center gap-3">
+          <div className="">
+            <Logo className="h-7 w-7 shrink-0"/>
           </div>
-          <span className="text-lg font-semibold tracking-tight">Pulse AI</span>
+          <span className="text-xl font-semibold tracking-tight">Pulse AI</span>
         </div>
         <button
           onClick={onToggle}
           aria-label="Collapse sidebar"
           className="rounded-lg p-1.5 text-muted-foreground transition-all duration-200 hover:bg-sidebar-accent hover:text-foreground"
         >
-          <PanelLeftClose className="h-4.5 w-4.5" />
+          <PanelLeftClose className="h-4.5 w-4.5"/>
         </button>
       </div>
 
