@@ -26,7 +26,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
     return (
       <div className="flex justify-end">
         <div className="max-w-[80%] rounded-2xl rounded-br-md bg-bubble px-4 py-3 text-[0.9375rem] leading-relaxed tracking-tight">
-          <p className="whitespace-pre-wrap break-words">{message.content}</p>
+          <p className="whitespace-pre-wrap wrap-break-words">{message.content}</p>
         </div>
       </div>
     );
@@ -63,7 +63,6 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           )}
         </div>
 
-        {/* Copy to clipboard shortcut — appears on completion */}
         {!message.streaming && message.content && (
           <button
             onClick={copyToClipboard}

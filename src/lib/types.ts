@@ -1,15 +1,23 @@
 export type Role = "user" | "assistant";
 
 export type ChatMessage ={
-  id: string;
+  id?: string;
   role: Role;
   content: string;
-  createdAt: number;
+  createdAt?: number;
   streaming?: boolean;
   error?: boolean;
 }
 
-export type ModelId = "gemini-2.5-flash";
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
+
+export type ModelId = "gemini-2.0-flash" | "gemini-1.5-flash" | "gemini-1.5-pro";
 
 export type ModelTier = "standard" | "premium";
 
@@ -58,12 +66,28 @@ export interface CreditPack {
 
 export const MODEL_OPTIONS: ModelOption[] = [
   {
-    id: "gemini-2.5-flash",
-    label: "Gemini 2.5 Flash",
+    id: "gemini-2.0-flash",
+    label: "Gemini 2.0 Flash",
     badge: "Standard",
     tier: "standard",
     creditCost: 0,
     description: "Fast everyday routing — free on all tiers",
+  },
+  {
+    id: "gemini-1.5-flash",
+    label: "Gemini 1.5 Flash",
+    badge: "Legacy Flash",
+    tier: "standard",
+    creditCost: 0,
+    description: "Highly stable fallback model",
+  },
+  {
+    id: "gemini-1.5-pro",
+    label: "Gemini 1.5 Pro",
+    badge: "Pro",
+    tier: "premium",
+    creditCost: 1,
+    description: "Complex reasoning and coding model",
   },
 ];
 

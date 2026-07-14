@@ -1,7 +1,8 @@
 import type { Conversation } from "@/lib/types";
-import { MessageSquare, PanelLeftClose, Plus, Trash2} from "lucide-react";
-import logo2 from "../assets/logo2.svg"
+import { MessageSquare, PanelLeftClose, Plus, Trash2, LogOut, LogIn } from "lucide-react";
 import { Logo } from "@/assets/logo";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   open: boolean;
@@ -23,6 +24,22 @@ export function Sidebar({
   onToggle,
 }: SidebarProps) {
   const sorted = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
+  const { user, isAuthenticated, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  // Generate initials from user name
+  const getInitials = (name: string) => {
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    navigate("/signin");
+  };
 
   return (
     <aside
@@ -93,6 +110,45 @@ export function Sidebar({
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* ─── Profile Section ─── */}
+      <div className="border-t border-sidebar-border px-3 py-3">
+        {isAuthenticated && user ? (
+          <div className="group flex items-center gap-3 rounded-xl px-2.5 py-2 transition-all duration-200 hover:bg-sidebar-accent/60">
+            {/* Avatar with initials */}
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-700 text-white text-xs font-semibold text- shadow-sm">
+              {getInitials(user.name)}
+            </div>
+
+            {/* Name + email */}
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium leading-tight text-foreground">
+                {user.name}
+              </p>
+              <p className="truncate text-[11px] leading-tight text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
+
+            {/* Sign out button */}
+            <button
+              onClick={handleSignOut}
+              aria-label="Sign out"
+              className="rounded-lg p-1.5 text-muted-foreground opacity-0 transition-all duration-200 hover:bg-secondary hover:text-destructive group-hover:opacity-100"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => navigate("/signin")}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-[length:200%_100%] px-3.5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-right hover:shadow-lg hover:shadow-purple-500/20"
+          >
+            <LogIn className="h-4 w-4" />
+            Sign in
+          </button>
+        )}
       </div>
     </aside>
   );
