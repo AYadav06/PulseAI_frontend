@@ -1,67 +1,68 @@
-export type Role = "user" | "assistant";
+export type Role = "user" | "assistant"
 
-export type ChatMessage ={
-  id?: string;
-  role: Role;
-  content: string;
-  createdAt?: number;
-  streaming?: boolean;
-  error?: boolean;
+export type ChatMessage = {
+  id?: string
+  role: Role
+  content: string
+  createdAt?: number
+  streaming?: boolean
+  error?: boolean
 }
 
 export interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
+  id: string
+  name: string
+  email: string
+  avatar?: string
+  credits?: number
+  isPremium?: boolean
 }
 
+export type ModelId = "gemini-2.0-flash" | "gemini-1.5-flash" | "gemini-1.5-pro"
 
-export type ModelId = "gemini-2.0-flash" | "gemini-1.5-flash" | "gemini-1.5-pro";
-
-export type ModelTier = "standard" | "premium";
+export type ModelTier = "standard" | "premium"
 
 export interface ModelOption {
-  id: ModelId;
-  label: string;
-  badge: string;
-  tier: ModelTier;
-  creditCost: number;
-  description: string;
+  id: ModelId
+  label: string
+  badge: string
+  tier: ModelTier
+  creditCost: number
+  description: string
 }
 
 export interface Conversation {
-  id: string;
-  title: string;
-  model: ModelId;
-  messages: ChatMessage[];
-  createdAt: number;
-  updatedAt: number;
+  id: string
+  title: string
+  model: ModelId
+  messages: ChatMessage[]
+  createdAt: number
+  updatedAt: number
 }
 
 export interface UserBilling {
-  credits: number;
-  premium: boolean;
+  credits: number
+  premium: boolean
 }
 
 export interface SSETokenChunk {
-  text?: string;
-  done?: boolean;
+  text?: string
+  done?: boolean
 }
 
 export interface StreamChatRequest {
-  model: ModelId;
-  messages: Array<Pick<ChatMessage, "role" | "content">>;
-  conversationId?: string;
+  model: ModelId
+  messages: Array<Pick<ChatMessage, "role" | "content">>
+  conversationId?: string
 }
 export interface CreditPack {
-  id: string;
-  name: string;
-  credits: number | "unlimited";
-  amountInr: number;
-  tagline: string;
-  premium?: boolean;
-  highlight?: boolean;
+  id: string
+  name: string
+  credits: number | "unlimited"
+  amountInr: number
+  tagline: string
+  premium?: boolean
+  highlight?: boolean
 }
 
 export const MODEL_OPTIONS: ModelOption[] = [
@@ -89,7 +90,7 @@ export const MODEL_OPTIONS: ModelOption[] = [
     creditCost: 1,
     description: "Complex reasoning and coding model",
   },
-];
+]
 
 export const CREDIT_PACKS: CreditPack[] = [
   {
@@ -115,4 +116,4 @@ export const CREDIT_PACKS: CreditPack[] = [
     tagline: "Unlimited active routing, forever",
     premium: true,
   },
-];
+]

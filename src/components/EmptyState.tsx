@@ -1,7 +1,7 @@
-import { Code2, PenLine, Network } from "lucide-react";
+import { Code2, PenLine, Network } from "lucide-react"
 
 interface EmptyStateProps {
-  onPrompt: (prompt: string) => void;
+  onPrompt: (prompt: string) => void
 }
 
 const FEATURES = [
@@ -13,7 +13,8 @@ const FEATURES = [
   {
     icon: PenLine,
     title: "Draft content blocks",
-    prompt: "Draft a compelling landing-page hero section for a developer tool.",
+    prompt:
+      "Draft a compelling landing-page hero section for a developer tool.",
   },
   {
     icon: Network,
@@ -21,7 +22,7 @@ const FEATURES = [
     prompt:
       "Brainstorm a scalable systems design architecture for a real-time chat app.",
   },
-];
+]
 
 export function EmptyState({ onPrompt }: EmptyStateProps) {
   return (
@@ -51,6 +52,5 @@ export function EmptyState({ onPrompt }: EmptyStateProps) {
         ))}
       </div>
     </div>
-  );
+  )
 }
-

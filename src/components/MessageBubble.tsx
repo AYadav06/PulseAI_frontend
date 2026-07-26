@@ -1,35 +1,36 @@
-import { useState } from "react";
-import { Check, Copy, Zap } from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import type { ChatMessage } from "../lib/types";
-
+import { useState } from "react"
+import { Check, Copy, Zap } from "lucide-react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import type { ChatMessage } from "../lib/types"
 
 interface MessageBubbleProps {
-  message: ChatMessage;
+  message: ChatMessage
 }
 
 export function MessageBubble({ message }: MessageBubbleProps) {
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState(false)
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(message.content);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      await navigator.clipboard.writeText(message.content)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
     } catch {
       // clipboard unavailable
     }
-  };
+  }
 
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[80%] rounded-2xl rounded-br-md bg-bubble px-4 py-3 text-[0.9375rem] leading-relaxed tracking-tight">
-          <p className="whitespace-pre-wrap wrap-break-words">{message.content}</p>
+        <div className="bg-bubble max-w-[80%] rounded-2xl rounded-br-md px-4 py-3 text-[0.9375rem] leading-relaxed tracking-tight">
+          <p className="wrap-break-words whitespace-pre-wrap">
+            {message.content}
+          </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -67,7 +68,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           <button
             onClick={copyToClipboard}
             aria-label="Copy to clipboard"
-            className="mt-2 flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground opacity-0 transition-all duration-200 hover:bg-secondary hover:text-foreground group-hover:opacity-100"
+            className="mt-2 flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-secondary hover:text-foreground"
           >
             {copied ? (
               <>
@@ -82,6 +83,5 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         )}
       </div>
     </div>
-  );
+  )
 }
-

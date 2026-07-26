@@ -1,12 +1,12 @@
-import { Check, ChevronDown, PanelLeftOpen, Sparkle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { MODEL_OPTIONS, type ModelId } from "../lib/types";
+import { Check, ChevronDown, PanelLeftOpen, Sparkle } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+import { MODEL_OPTIONS, type ModelId } from "../lib/types"
 
 interface ChatHeaderProps {
-  sidebarOpen: boolean;
-  model: ModelId;
-  onModelChange: (model: ModelId) => void;
-  onOpenSidebar: () => void;
+  sidebarOpen: boolean
+  model: ModelId
+  onModelChange: (model: ModelId) => void
+  onOpenSidebar: () => void
 }
 
 export function ChatHeader({
@@ -15,19 +15,19 @@ export function ChatHeader({
   onModelChange,
   onOpenSidebar,
 }: ChatHeaderProps) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const active = MODEL_OPTIONS.find((m) => m.id === model) ?? MODEL_OPTIONS[0];
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const active = MODEL_OPTIONS.find((m) => m.id === model) ?? MODEL_OPTIONS[0]
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
+        setOpen(false)
       }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
+  }, [])
 
   return (
     <header className="flex items-center gap-2 border-b border-border px-4 py-3">
@@ -63,19 +63,21 @@ export function ChatHeader({
         </button>
 
         {open && (
-          <div className="absolute left-0 top-full z-50 mt-1.5 w-80 overflow-hidden rounded-xl border border-border bg-popover shadow-2xl shadow-black/50">
+          <div className="absolute top-full left-0 z-50 mt-1.5 w-80 overflow-hidden rounded-xl border border-border bg-popover shadow-2xl shadow-black/50">
             {MODEL_OPTIONS.map((option) => (
               <button
                 key={option.id}
                 onClick={() => {
-                  onModelChange(option.id);
-                  setOpen(false);
+                  onModelChange(option.id)
+                  setOpen(false)
                 }}
                 className="flex w-full items-start gap-3 px-4 py-3 text-left transition-all duration-200 hover:bg-secondary"
               >
                 <Sparkle
                   className={`mt-0.5 h-4 w-4 shrink-0 ${
-                    option.tier === "premium" ? "text-glow" : "text-muted-foreground"
+                    option.tier === "premium"
+                      ? "text-glow"
+                      : "text-muted-foreground"
                   }`}
                 />
                 <div className="flex-1">
@@ -98,5 +100,5 @@ export function ChatHeader({
         )}
       </div>
     </header>
-  );
+  )
 }

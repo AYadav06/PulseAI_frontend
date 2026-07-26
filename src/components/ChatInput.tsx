@@ -1,15 +1,15 @@
-import { useEffect, useRef, type KeyboardEvent } from "react";
-import { ArrowUp, Square } from "lucide-react";
+import { useEffect, useRef, type KeyboardEvent } from "react"
+import { ArrowUp, Square } from "lucide-react"
 
 interface ChatInputProps {
-  value: string;
-  streaming: boolean;
-  onChange: (value: string) => void;
-  onSubmit: () => void;
-  onStop: () => void;
+  value: string
+  streaming: boolean
+  onChange: (value: string) => void
+  onSubmit: () => void
+  onStop: () => void
 }
 
-const MAX_HEIGHT = 200;
+const MAX_HEIGHT = 200
 
 export function ChatInput({
   value,
@@ -18,28 +18,28 @@ export function ChatInput({
   onSubmit,
   onStop,
 }: ChatInputProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Auto-growing textarea, capped at 200px
   useEffect(() => {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = `${Math.min(el.scrollHeight, MAX_HEIGHT)}px`;
-  }, [value]);
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = "auto"
+    el.style.height = `${Math.min(el.scrollHeight, MAX_HEIGHT)}px`
+  }, [value])
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      if (!streaming && value.trim()) onSubmit();
+      e.preventDefault()
+      if (!streaming && value.trim()) onSubmit()
     }
     // Shift + Enter falls through → inserts a newline
-  };
+  }
 
-  const canSend = value.trim().length > 0 && !streaming;
+  const canSend = value.trim().length > 0 && !streaming
 
   return (
-    <div className="px-4 pb-5 pt-2">
+    <div className="px-4 pt-2 pb-5">
       <div className="mx-auto max-w-3xl">
         {/* Gradient border fade wrapper */}
         <div className="rounded-3xl p-[1.5px] transition-all duration-200 focus-within:shadow-[0_0_28px_oklch(0.546_0.245_262.881/25%)]">
@@ -51,7 +51,7 @@ export function ChatInput({
               onKeyDown={handleKeyDown}
               rows={1}
               placeholder="Ask Pulse anything…"
-              className=" chat-scrollbar max-h-50 flex-1 resize-none bg-transparent text-[0.9375rem] leading-relaxed tracking-tight text-foreground outline-none placeholder:text-muted-foreground"
+              className="chat-scrollbar max-h-50 flex-1 resize-none bg-transparent text-[0.9375rem] leading-relaxed tracking-tight text-foreground outline-none placeholder:text-muted-foreground"
             />
             {streaming ? (
               <button
@@ -78,6 +78,5 @@ export function ChatInput({
         </p>
       </div>
     </div>
-  );
+  )
 }
-

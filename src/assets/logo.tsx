@@ -50,7 +50,6 @@
 //   );
 // }
 
-
 export function Logo({ className = "h-10 w-10" }: { className?: string }) {
   return (
     <svg
@@ -59,24 +58,13 @@ export function Logo({ className = "h-10 w-10" }: { className?: string }) {
       className={className}
     >
       <defs>
-        <linearGradient
-          id="pulse-gradient"
-          x1="0%"
-          y1="0%"
-          x2="100%"
-          y2="100%"
-        >
+        <linearGradient id="pulse-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#5B9BFF" />
           <stop offset="100%" stopColor="#2B4C8C" />
         </linearGradient>
       </defs>
 
-      <rect
-        width="120"
-        height="120"
-        rx="28"
-        fill="url(#pulse-gradient)"
-      />
+      <rect width="120" height="120" rx="28" fill="url(#pulse-gradient)" />
 
       <path
         d="M18 60H40L52 28L64 60H82"
@@ -87,12 +75,7 @@ export function Logo({ className = "h-10 w-10" }: { className?: string }) {
         strokeLinejoin="round"
       />
 
-      <circle
-        cx="94"
-        cy="60"
-        r="7"
-        fill="#F4F7FD"
-      />
+      <circle cx="94" cy="60" r="7" fill="#F4F7FD" />
     </svg>
-  );
+  )
 }
