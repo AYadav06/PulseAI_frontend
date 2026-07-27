@@ -1,11 +1,12 @@
-const API_BASE = "http://localhost:3000/api/v1"
+import dotenv from "dotenv"
 
-/** Shared fetch wrapper that always sends credentials (cookies). */
+dotenv.config();
+
 async function apiFetch(
   path: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  return fetch(`${API_BASE}${path}`, {
+  return fetch(`${process.env.API_BASE}${path}`, {
     ...options,
     credentials: "include",
     headers: {
@@ -167,5 +168,5 @@ export async function apiDeleteChat(chatId: string): Promise<boolean> {
 // ────────────────────────── Streaming ──────────────────────────
 
 export function getStreamUrl(): string {
-  return `${API_BASE}/chat`
+  return `${process.env.API_BASE}/chat`
 }
