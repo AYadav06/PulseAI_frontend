@@ -1,12 +1,11 @@
-import dotenv from "dotenv"
 
-dotenv.config();
+const API_BASE = import.meta.env.VITE_API_BASE 
 
 async function apiFetch(
   path: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  return fetch(`${process.env.API_BASE}${path}`, {
+  return fetch(`${API_BASE}${path}`, {
     ...options,
     credentials: "include",
     headers: {
@@ -168,5 +167,5 @@ export async function apiDeleteChat(chatId: string): Promise<boolean> {
 // ────────────────────────── Streaming ──────────────────────────
 
 export function getStreamUrl(): string {
-  return `${process.env.API_BASE}/chat`
+  return `${API_BASE}/chat`
 }
