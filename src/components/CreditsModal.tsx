@@ -87,7 +87,7 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
 
       // 2. Configure Razorpay checkout options
       const options = {
-        key: order.keyId,
+        key: order.keyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
         name: "PulseAI",
@@ -114,8 +114,8 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
 
             setSuccessMessage(
               result.plan === "premium"
-                ? "🎉 Premium Access Unlocked! Enjoy unlimited requests."
-                : `🎉 Payment successful! Added ${result.creditsAwarded} credits to your account.`
+                ? " Premium Access Unlocked! Enjoy unlimited requests."
+                : `Payment successful! Added ${result.creditsAwarded} credits to your account.`
             )
 
             // Refresh user credits in global state
