@@ -65,7 +65,9 @@ export function Sidebar({
             <div className="">
               <Logo className="h-7 w-7 shrink-0" />
             </div>
-            <span className="text-xl font-semibold tracking-tight">Pulse AI</span>
+            <span className="text-xl font-semibold tracking-tight">
+              Pulse AI
+            </span>
           </div>
           <button
             onClick={onToggle}
@@ -125,7 +127,7 @@ export function Sidebar({
         </div>
 
         {/* ─── Profile & Credits Section ─── */}
-        <div className="border-t border-sidebar-border px-3 py-3 space-y-2">
+        <div className="space-y-2 border-t border-sidebar-border px-3 py-3">
           {isAuthenticated && user ? (
             <>
               {/* Credits Row */}
@@ -134,11 +136,13 @@ export function Sidebar({
                   {user.isPremium ? (
                     <>
                       <Crown className="h-4 w-4 text-amber-400" />
-                      <span className="text-amber-300 font-bold">Unlimited</span>
+                      <span className="font-bold text-amber-300">
+                        Unlimited
+                      </span>
                     </>
                   ) : (
                     <>
-                      <Zap className="h-4 w-4 text-amber-400 fill-amber-400" />
+                      <Zap className="h-4 w-4 fill-amber-400 text-amber-400" />
                       <span className="text-foreground">
                         {user.credits ?? 0} Credits
                       </span>
@@ -148,7 +152,7 @@ export function Sidebar({
 
                 <button
                   onClick={() => setIsCreditsModalOpen(true)}
-                  className="flex items-center gap-1 rounded-lg bg-indigo-600/90 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm transition-all duration-200 hover:bg-indigo-500 hover:scale-[1.03]"
+                  className="flex items-center gap-1 rounded-lg bg-indigo-600/90 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.03] hover:bg-indigo-500"
                 >
                   <Plus className="h-3 w-3" />
                   Add Credits

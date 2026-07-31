@@ -37,9 +37,6 @@ export const Dashboard = () => {
     stopGeneration,
   } = useStreaming()
 
-  // Determine which messages to display
-  // If we have an active saved conversation AND no streaming messages, show saved.
-  // Otherwise show the streaming state.
   const displayMessages =
     messages.length > 0 ? messages : activeConversation?.messages || []
 

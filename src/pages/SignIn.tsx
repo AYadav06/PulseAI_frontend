@@ -46,7 +46,7 @@ export function SignIn() {
 
     try {
       await signIn(email, password)
-      navigate("/")
+      navigate("/dashboard")
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Sign in failed. Please try again."

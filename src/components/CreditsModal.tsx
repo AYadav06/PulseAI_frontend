@@ -35,7 +35,11 @@ const PLANS: PlanCard[] = [
     credits: "50 Credits",
     price: "₹99",
     description: "Great for light users & testing Pro models",
-    features: ["50 Pro model requests", "Never expires", "Standard response speed"],
+    features: [
+      "50 Pro model requests",
+      "Never expires",
+      "Standard response speed",
+    ],
   },
   {
     id: "pro",
@@ -142,12 +146,15 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
       }
 
       const rzp = new window.Razorpay(options)
-      rzp.on("payment.failed", (response: { error: { description: string } }) => {
-        setErrorMessage(
-          response.error?.description || "Payment failed. Please try again."
-        )
-        setLoadingPlan(null)
-      })
+      rzp.on(
+        "payment.failed",
+        (response: { error: { description: string } }) => {
+          setErrorMessage(
+            response.error?.description || "Payment failed. Please try again."
+          )
+          setLoadingPlan(null)
+        }
+      )
 
       rzp.open()
     } catch (err) {
@@ -159,20 +166,20 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-black/70 p-4 backdrop-blur-md duration-200 fade-in">
       <div
-        className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/95 p-6 shadow-2xl md:p-8 text-foreground"
+        className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/95 p-6 text-foreground shadow-2xl md:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Background glow effects */}
         <div className="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 -bottom-24 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl" />
 
         {/* Header */}
         <div className="flex items-start justify-between border-b border-white/10 pb-5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/20 text-indigo-400">
                 <Zap className="h-4 w-4" />
               </span>
               <h2 className="text-xl font-bold tracking-tight text-white md:text-2xl">
@@ -194,7 +201,7 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
                 </>
               ) : (
                 <>
-                  <Zap className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
+                  <Zap className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                   <span>{user?.credits ?? 0} Credits</span>
                 </>
               )}
@@ -219,7 +226,7 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
 
         {successMessage && (
           <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-sm font-medium text-emerald-300">
-            <Sparkles className="h-4 w-4 text-emerald-400 shrink-0" />
+            <Sparkles className="h-4 w-4 shrink-0 text-emerald-400" />
             <span>{successMessage}</span>
           </div>
         )}
@@ -235,14 +242,14 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
                   plan.highlighted
                     ? "border-indigo-500/60 bg-indigo-950/20 shadow-lg shadow-indigo-500/10 hover:border-indigo-400"
                     : plan.id === "premium"
-                    ? "border-amber-500/40 bg-amber-950/10 hover:border-amber-400/60"
-                    : "border-white/10 bg-zinc-800/40 hover:border-white/20"
+                      ? "border-amber-500/40 bg-amber-950/10 hover:border-amber-400/60"
+                      : "border-white/10 bg-zinc-800/40 hover:border-white/20"
                 }`}
               >
                 {/* Plan Badge */}
                 {plan.badge && (
                   <span
-                    className={`absolute -top-2.5 right-4 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                    className={`absolute -top-2.5 right-4 rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase ${
                       plan.id === "premium"
                         ? "bg-amber-500 text-black shadow-sm"
                         : "bg-indigo-600 text-white shadow-sm"
@@ -268,14 +275,14 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
                     <span>{plan.credits}</span>
                   </div>
 
-                  <p className="mt-2 text-xs text-zinc-400 leading-relaxed">
+                  <p className="mt-2 text-xs leading-relaxed text-zinc-400">
                     {plan.description}
                   </p>
 
                   <ul className="mt-4 space-y-2 border-t border-white/5 pt-3 text-xs text-zinc-300">
                     {plan.features.map((feat, idx) => (
                       <li key={idx} className="flex items-center gap-2">
-                        <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                        <Check className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -289,8 +296,8 @@ export function CreditsModal({ isOpen, onClose }: CreditsModalProps) {
                     plan.highlighted
                       ? "bg-indigo-600 text-white hover:bg-indigo-500 hover:shadow-md hover:shadow-indigo-500/20"
                       : plan.id === "premium"
-                      ? "bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold hover:brightness-110"
-                      : "bg-white/10 text-white hover:bg-white/20"
+                        ? "bg-linear-to-r from-amber-500 to-amber-600 font-bold text-black hover:brightness-110"
+                        : "bg-white/10 text-white hover:bg-white/20"
                   }`}
                 >
                   {isLoading ? (

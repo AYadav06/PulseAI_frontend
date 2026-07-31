@@ -3,6 +3,7 @@ import { Dashboard } from "./pages/Dashboard"
 import { SignIn } from "./pages/SignIn"
 import { SignUp } from "./pages/SignUp"
 import { useAuth } from "./context/AuthContext"
+import LandingPage from "./pages/Landing"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -34,7 +35,7 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/dashboard" replace />
   }
 
   return <>{children}</>
@@ -43,8 +44,9 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
 export function App() {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route
-        path="/"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <Dashboard />
