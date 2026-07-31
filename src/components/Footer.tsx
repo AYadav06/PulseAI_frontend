@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import { Container } from "./ui/container"
-import { Sparkles } from "lucide-react"
+import { Logo } from "@/assets/logo"
 import {
   GithubLogoIcon,
   LinkedinLogoIcon,
@@ -14,10 +14,8 @@ export default function Footer() {
         <div className="py-16 lg:py-20">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
             <div className="lg:col-span-2">
-              <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/20">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                </div>
+              <div className="mb-4 flex items-center gap-2.5">
+                <Logo className="h-8 w-8 shrink-0" />
                 <span className="text-lg font-bold tracking-tight">
                   PulseAI
                 </span>
@@ -122,7 +120,7 @@ export default function Footer() {
             <p className="text-xs text-muted-foreground">
               2026 PulseAI. All rights reserved.
             </p>
-            <p className="font-mono text-xs text-muted-foreground">v2.4.1</p>
+            <p className="font-mono text-xs text-muted-foreground">v1.0.1</p>
           </div>
         </div>
       </Container>

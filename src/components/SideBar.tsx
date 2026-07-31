@@ -81,10 +81,10 @@ export function Sidebar({
         <div className="px-3 pb-3">
           <button
             onClick={onNewChat}
-            className="flex w-full items-center gap-2 rounded-xl border border-sidebar-border bg-sidebar-accent px-3.5 py-2.5 text-sm font-medium transition-all duration-200 hover:scale-[1.01] hover:border-primary/40"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-[#5B9BFF] to-[#2B4C8C] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:opacity-90 hover:shadow-md active:scale-[0.99]"
           >
-            <Plus className="h-4 w-4" />
-            New chat
+            <Plus className="h-4 w-4 shrink-0 text-white" />
+            <span>New chat</span>
           </button>
         </div>
 
@@ -104,7 +104,7 @@ export function Sidebar({
                   onClick={() => onSelect(conv.id)}
                   className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 pr-9 text-left text-sm transition-all duration-200 ${
                     conv.id === activeId
-                      ? "bg-sidebar-accent text-foreground"
+                      ? "bg-sidebar-accent font-medium text-foreground"
                       : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground"
                   }`}
                 >
@@ -147,15 +147,15 @@ export function Sidebar({
                         {user.credits ?? 0} Credits
                       </span>
                     </>
-                  )}
+                  ) }
                 </div>
 
                 <button
                   onClick={() => setIsCreditsModalOpen(true)}
-                  className="flex items-center gap-1 rounded-lg bg-indigo-600/90 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.03] hover:bg-indigo-500"
+                  className="flex items-center gap-1.5 rounded-lg bg-linear-to-r from-[#5B9BFF] to-[#2B4C8C] px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <Plus className="h-3 w-3" />
-                  Add Credits
+                  <Plus className="h-3.5 w-3.5 text-white" />
+                  <span>Add Credits</span>
                 </button>
               </div>
 

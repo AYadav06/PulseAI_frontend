@@ -1,9 +1,10 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X, Sparkles } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { Container } from "./ui/container"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "@/context/AuthContext"
+import { Logo } from "@/assets/logo"
 
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -14,10 +15,8 @@ export default function Header() {
     <header className="`supports-backdrop-filter:bg-background/60` sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
       <Container>
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/20">
-              <Sparkles className="h-4 w-4 text-primary" />
-            </div>
+          <Link to="/" className="flex items-center gap-2.5">
+            <Logo className="h-8 w-8 shrink-0" />
             <span className="text-lg font-bold tracking-tight">PulseAI</span>
           </Link>
 
