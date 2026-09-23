@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Check, Copy, Zap } from "lucide-react"
+import { Check, Copy } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import type { ChatMessage } from "../lib/types"
@@ -24,7 +24,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="bg-bubble max-w-[80%] rounded-2xl rounded-br-md px-4 py-3 text-[0.9375rem] leading-relaxed tracking-tight">
+        <div className="max-w-[82%] rounded-[18px] bg-[#00a6ff] px-5 py-3 text-[15px] font-normal leading-relaxed text-white shadow-sm">
           <p className="wrap-break-words whitespace-pre-wrap">
             {message.content}
           </p>
@@ -33,30 +33,33 @@ export function MessageBubble({ message }: MessageBubbleProps) {
     )
   }
 
-  return (
-    <div className="flex gap-3.5">
-      {/* Glowing agent icon trace */}
-      <div className="agent-glow mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600">
-        <Zap className="h-4 w-4 text-primary-foreground" fill="currentColor" />
+  // Standalone typing indicator when response is pending
+  if (message.streaming && !message.content) {
+    return (
+      <div className="flex justify-start">
+        <div className="inline-flex items-center gap-1.5 rounded-2xl border border-[#182338]/70 bg-[#0c1322] px-4 py-3 shadow-sm">
+          <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:0ms]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:150ms]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:300ms]" />
+        </div>
       </div>
+    )
+  }
 
-      <div className="group min-w-0 flex-1">
+  // Assistant response inside dark card bubble
+  return (
+    <div className="flex justify-start">
+      <div className="group relative max-w-[85%] rounded-[18px] border border-[#182338]/60 bg-[#0c1322] px-5 py-4 text-[15px] leading-relaxed text-[#e2e8f0] shadow-sm">
         <div
-          className={`md-body text-foreground ${
+          className={`md-body ${
             message.streaming && message.content ? "stream-cursor" : ""
           }`}
         >
-          {message.content ? (
+          {message.content && (
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {message.content}
             </ReactMarkdown>
-          ) : message.streaming ? (
-            <span className="inline-flex gap-1">
-              <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
-            </span>
-          ) : null}
+          )}
           {message.error && (
             <p className="mt-2 text-sm text-destructive">
               Something went wrong while streaming this response.
@@ -68,11 +71,11 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           <button
             onClick={copyToClipboard}
             aria-label="Copy to clipboard"
-            className="mt-2 flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-secondary hover:text-foreground"
+            className="absolute top-3 right-3 flex items-center gap-1 rounded-md bg-[#131c30]/80 px-2 py-1 text-xs text-slate-400 opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-[#1a2640] hover:text-white"
           >
             {copied ? (
               <>
-                <Check className="h-3.5 w-3.5 text-primary" /> Copied
+                <Check className="h-3.5 w-3.5 text-sky-400" /> Copied
               </>
             ) : (
               <>

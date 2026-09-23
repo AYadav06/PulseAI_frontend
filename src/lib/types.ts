@@ -18,7 +18,6 @@ export interface User {
   isPremium?: boolean
 }
 
-export type ModelId = "gemini-2.0-flash" | "gemini-1.5-flash" | "gemini-1.5-pro"
 
 export type ModelTier = "standard" | "premium"
 
@@ -65,30 +64,32 @@ export interface CreditPack {
   highlight?: boolean
 }
 
+export type ModelId = "gemini-2.5-flash" | "gemini-2.5-flash-lite" | "gemini-2.5-pro"
+
 export const MODEL_OPTIONS: ModelOption[] = [
   {
-    id: "gemini-2.0-flash",
-    label: "Gemini 2.0 Flash",
-    badge: "Standard",
+    id: "gemini-2.5-flash-lite",
+    label: "Gemini 2.5 Flash Lite",
+    badge: "Fast",
     tier: "standard",
-    creditCost: 0,
-    description: "Fast everyday routing — free on all tiers",
-  },
-  {
-    id: "gemini-1.5-flash",
-    label: "Gemini 1.5 Flash",
-    badge: "Legacy Flash",
-    tier: "standard",
-    creditCost: 0,
-    description: "Highly stable fallback model",
-  },
-  {
-    id: "gemini-1.5-pro",
-    label: "Gemini 1.5 Pro",
-    badge: "Pro",
-    tier: "premium",
     creditCost: 1,
-    description: "Complex reasoning and coding model",
+    description: "Quickest responses, best for short questions and casual chat.",
+  },
+  {
+    id: "gemini-2.5-flash",
+    label: "Gemini 2.5 Flash",
+    badge: "Balanced",
+    tier: "standard",
+    creditCost: 2,
+    description: "Strong all-round quality and speed for everyday use.",
+  },
+  {
+    id: "gemini-2.5-pro",
+    label: "Gemini 2.5 Pro",
+    badge: "Premium",
+    tier: "premium",
+    creditCost: 5,
+    description: "Highest-quality reasoning for complex or detailed tasks.",
   },
 ]
 

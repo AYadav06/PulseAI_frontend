@@ -1,5 +1,5 @@
 import { useEffect, useRef, type KeyboardEvent } from "react"
-import { ArrowUp, Square } from "lucide-react"
+import { ArrowRight, Square } from "lucide-react"
 
 interface ChatInputProps {
   value: string
@@ -33,7 +33,6 @@ export function ChatInput({
       e.preventDefault()
       if (!streaming && value.trim()) onSubmit()
     }
-    // Shift + Enter falls through → inserts a newline
   }
 
   const canSend = value.trim().length > 0 && !streaming
@@ -41,39 +40,36 @@ export function ChatInput({
   return (
     <div className="px-4 pt-2 pb-5">
       <div className="mx-auto max-w-3xl">
-        {/* Gradient border fade wrapper */}
-        <div className="rounded-3xl p-[1.5px] transition-all duration-200 focus-within:shadow-[0_0_28px_oklch(0.546_0.245_262.881/25%)]">
-          <div className="flex items-end gap-2 rounded-[calc(1.5rem-1.5px)] bg-card px-4 py-3">
-            <textarea
-              ref={textareaRef}
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              rows={1}
-              placeholder="Ask Pulse anything…"
-              className="chat-scrollbar max-h-50 flex-1 resize-none bg-transparent text-[0.9375rem] leading-relaxed tracking-tight text-foreground outline-none placeholder:text-muted-foreground"
-            />
-            {streaming ? (
-              <button
-                onClick={onStop}
-                aria-label="Stop generation"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground transition-all duration-200 hover:scale-[1.05] hover:bg-secondary/80"
-              >
-                <Square className="h-3.5 w-3.5" fill="currentColor" />
-              </button>
-            ) : (
-              <button
-                onClick={onSubmit}
-                disabled={!canSend}
-                aria-label="Send message"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all duration-200 enabled:hover:scale-[1.05] enabled:hover:bg-primary/90 disabled:opacity-30"
-              >
-                <ArrowUp className="h-4.5 w-4.5" />
-              </button>
-            )}
-          </div>
+        <div className="flex items-center gap-3 rounded-2xl border border-[#182338] bg-[#070d1a] px-4 py-3 shadow-lg shadow-black/40 transition-colors focus-within:border-[#00a6ff]/50">
+          <textarea
+            ref={textareaRef}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            rows={1}
+            placeholder="Ask PulseAI anything..."
+            className="chat-scrollbar max-h-48 flex-1 resize-none bg-transparent text-[15px] leading-relaxed text-[#f1f5f9] outline-none placeholder:text-[#64748b]"
+          />
+          {streaming ? (
+            <button
+              onClick={onStop}
+              aria-label="Stop generation"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-destructive text-white transition-all hover:scale-105 active:scale-95"
+            >
+              <Square className="h-4 w-4" fill="currentColor" />
+            </button>
+          ) : (
+            <button
+              onClick={onSubmit}
+              disabled={!canSend}
+              aria-label="Send message"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#00a6ff] text-white transition-all enabled:hover:scale-105 enabled:hover:bg-[#0095ea] enabled:active:scale-95 disabled:opacity-30"
+            >
+              <ArrowRight className="h-5 w-5 text-white" />
+            </button>
+          )}
         </div>
-        <p className="mt-2 text-center text-[11px] text-muted-foreground">
+        <p className="mt-2 text-center text-[11px] text-[#64748b]/80">
           Enter to send · Shift + Enter for a new line
         </p>
       </div>

@@ -1,8 +1,10 @@
 import { ChatHeader } from "@/components/ChatHeader"
 import { ChatInput } from "@/components/ChatInput"
+import { CreditsModal } from "@/components/CreditsModal"
 import { EmptyState } from "@/components/EmptyState"
 import { MessageBubble } from "@/components/MessageBubble"
 import { Sidebar } from "@/components/SideBar"
+import { useAuth } from "@/context/AuthContext"
 import { useStreaming } from "@/hooks/useStreaming"
 import type { ModelId, Conversation } from "@/lib/types"
 import { useEffect, useRef, useState, useCallback } from "react"
@@ -15,6 +17,8 @@ import {
 
 export const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [isCreditsModalOpen, setIsCreditsModalOpen] = useState(false)
+  const { refreshUser } = useAuth()
 
   // Executions represent the sidebar list
   const [executions, setExecutions] = useState<ApiExecution[]>([])
@@ -24,7 +28,7 @@ export const Dashboard = () => {
     useState<Conversation | null>(null)
   const [activeId, setActiveId] = useState<string | null>(null)
 
-  const [model, setModel] = useState<ModelId>("gemini-2.0-flash")
+  const [model, setModel] = useState<ModelId>("gemini-2.5-flash")
   const [input, setInput] = useState("")
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -66,7 +70,7 @@ export const Dashboard = () => {
         setActiveConversation({
           id: conv._id,
           title: "Chat", // It's from Execution normally, but we just need it for types
-          model: "gemini-2.0-flash",
+          model: "gemini-2.5-flash",
           messages: conv.messages.map((m) => ({
             id: (Math.random() * 10000).toString(),
             role: m.role as "user" | "assistant",
@@ -124,22 +128,27 @@ export const Dashboard = () => {
     // activeConversation?.id is the underlying Conversation _id (not Execution _id)
     const currentConvId = activeConversation?.id
 
-    const returnedConvId = await sendMessage(text, model, currentConvId)
+    try {
+      const returnedConvId = await sendMessage(text, model, currentConvId)
 
-    if (returnedConvId) {
-      if (!currentConvId) {
-        // New chat: persist the conversationId so follow-up messages continue the same thread
-        setActiveConversation({
-          id: returnedConvId,
-          title: text.slice(0, 40),
-          model,
-          messages: [],
-          createdAt: Date.now(),
-          updatedAt: Date.now(),
-        })
-        // Refresh the sidebar to show the new entry
-        await fetchExecutions()
+      if (returnedConvId) {
+        if (!currentConvId) {
+          // New chat: persist the conversationId so follow-up messages continue the same thread
+          setActiveConversation({
+            id: returnedConvId,
+            title: text.slice(0, 40),
+            model,
+            messages: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          })
+          // Refresh the sidebar to show the new entry
+          await fetchExecutions()
+        }
       }
+    } finally {
+      // Sync remaining credits and user state after chat message finishes
+      await refreshUser()
     }
   }
 
@@ -147,7 +156,7 @@ export const Dashboard = () => {
   const sidebarConversations: Conversation[] = executions.map((ex) => ({
     id: ex._id,
     title: ex.title,
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     messages: [],
     createdAt: new Date(ex.createdAt).getTime(),
     updatedAt: new Date(ex.updatedAt).getTime(),
@@ -173,12 +182,13 @@ export const Dashboard = () => {
         onToggle={() => setSidebarOpen(false)}
       />
 
-      <main className="flex min-w-0 flex-1 flex-col">
+      <main className="flex min-w-0 flex-1 flex-col bg-[#030712]">
         <ChatHeader
           sidebarOpen={sidebarOpen}
           model={model}
           onModelChange={setModel}
           onOpenSidebar={() => setSidebarOpen(true)}
+          onOpenCreditsModal={() => setIsCreditsModalOpen(true)}
         />
 
         {displayMessages.length > 0 ? (
@@ -186,7 +196,7 @@ export const Dashboard = () => {
             ref={scrollRef}
             className="chat-scrollbar flex-1 overflow-y-auto"
           >
-            <div className="mx-auto max-w-3xl space-y-8 px-4 py-8">
+            <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
               {displayMessages.map((message, index) => (
                 <MessageBubble
                   key={message.id ?? `msg-${index}`}
@@ -202,8 +212,18 @@ export const Dashboard = () => {
         )}
 
         {error && (
-          <div className="mx-auto max-w-3xl px-4 pb-2">
-            <p className="text-sm text-destructive">{error}</p>
+          <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-2.5 text-sm text-destructive shadow-xs">
+            <span>{error}</span>
+            {(error.toLowerCase().includes("credit") ||
+              error.toLowerCase().includes("premium") ||
+              error.toLowerCase().includes("upgrade")) && (
+              <button
+                onClick={() => setIsCreditsModalOpen(true)}
+                className="shrink-0 rounded-lg bg-destructive/20 px-3 py-1 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/30 hover:underline"
+              >
+                Top Up / Upgrade
+              </button>
+            )}
           </div>
         )}
 
@@ -215,6 +235,11 @@ export const Dashboard = () => {
           onStop={stopGeneration}
         />
       </main>
+
+      <CreditsModal
+        isOpen={isCreditsModalOpen}
+        onClose={() => setIsCreditsModalOpen(false)}
+      />
     </div>
   )
 }

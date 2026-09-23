@@ -39,7 +39,7 @@ export const useStreaming = (): UseStreamingReturn => {
   const sendMessage = useCallback(
     async (
       prompt: string,
-      selectedModel: string = "gemini-2.0-flash",
+      selectedModel: string = "gemini-2.5-flash",
       conversationId?: string
     ): Promise<string | undefined> => {
       if (!prompt.trim()) return undefined
