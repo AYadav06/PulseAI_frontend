@@ -1,5 +1,6 @@
 import type { ChatMessage } from "@/lib/types"
 import { useState, useRef, useCallback } from "react"
+import { getStoredToken } from "@/lib/api"
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000/api/v1"
 
@@ -64,10 +65,17 @@ export const useStreaming = (): UseStreamingReturn => {
 
       try {
         // 2. Dispatch fetch request to /chat endpoint
+        const token = getStoredToken()
+        const authHeaders: Record<string, string> = {}
+        if (token) {
+          authHeaders["Authorization"] = `Bearer ${token}`
+        }
+
         const response = await fetch(`${API_BASE}/chat`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders,
           },
           credentials: "include",
           body: JSON.stringify({

@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .replace(/[._-]/g, " ")
             .replace(/\b\w/g, (c) => c.toUpperCase()),
           email: apiUser.email,
-          credits: apiUser.credits ?? 0,
+          credits: apiUser.credits ?? 5,
           isPremium: apiUser.isPremium ?? false,
         })
       } else {
@@ -47,23 +47,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  // Hydrate auth state from cookie on mount via GET /me
+  // Hydrate auth state from cookie/token on mount via GET /me
   useEffect(() => {
     refreshUser().finally(() => setIsLoading(false))
   }, [refreshUser])
 
   const signIn = useCallback(
     async (email: string, password: string) => {
-      await apiSignIn(email, password)
-      await refreshUser()
+      const apiUser = await apiSignIn(email, password)
+      if (apiUser) {
+        setUser({
+          id: apiUser.id,
+          name: apiUser.email
+            .split("@")[0]
+            .replace(/[._-]/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase()),
+          email: apiUser.email,
+          credits: apiUser.credits ?? 5,
+          isPremium: apiUser.isPremium ?? false,
+        })
+      }
+      // Non-blocking sync to get latest credits & state
+      refreshUser()
     },
     [refreshUser]
   )
 
   const signUp = useCallback(
-    async (_name: string, email: string, password: string) => {
-      await apiSignUp(email, password)
-      await refreshUser()
+    async (name: string, email: string, password: string) => {
+      const apiUser = await apiSignUp(email, password)
+      if (apiUser) {
+        setUser({
+          id: apiUser.id,
+          name:
+            name.trim() ||
+            apiUser.email
+              .split("@")[0]
+              .replace(/[._-]/g, " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase()),
+          email: apiUser.email,
+          credits: apiUser.credits ?? 5,
+          isPremium: apiUser.isPremium ?? false,
+        })
+      }
+      // Non-blocking sync
+      refreshUser()
     },
     [refreshUser]
   )

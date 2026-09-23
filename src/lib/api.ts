@@ -1,14 +1,43 @@
 const API_BASE = import.meta.env.VITE_API_BASE
 
+export const TOKEN_KEY = "pulseai_token"
+
+export function getStoredToken(): string | null {
+  try {
+    return localStorage.getItem(TOKEN_KEY)
+  } catch {
+    return null
+  }
+}
+
+export function setStoredToken(token: string | null) {
+  try {
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token)
+    } else {
+      localStorage.removeItem(TOKEN_KEY)
+    }
+  } catch {
+    // Ignore localStorage failures
+  }
+}
+
 async function apiFetch(
   path: string,
   options: RequestInit = {}
 ): Promise<Response> {
+  const token = getStoredToken()
+  const authHeaders: Record<string, string> = {}
+  if (token) {
+    authHeaders["Authorization"] = `Bearer ${token}`
+  }
+
   return fetch(`${API_BASE}${path}`, {
     ...options,
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      ...authHeaders,
       ...options.headers,
     },
   })
@@ -23,8 +52,9 @@ export interface ApiUser {
   isPremium?: boolean
 }
 
-interface AuthResponse {
+export interface AuthResponse {
   message: string
+  token?: string
   user: ApiUser
 }
 
@@ -36,12 +66,14 @@ export async function apiSignUp(
     method: "POST",
     body: JSON.stringify({ email, password }),
   })
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
+  const body = await res.json().catch(() => ({}))
+  if (!res.ok || !body.user) {
     throw new Error(body.message || "Sign up failed")
   }
-  const data: AuthResponse = await res.json()
-  return data.user
+  if (body.token) {
+    setStoredToken(body.token)
+  }
+  return body.user
 }
 
 export async function apiSignIn(
@@ -52,23 +84,29 @@ export async function apiSignIn(
     method: "POST",
     body: JSON.stringify({ email, password }),
   })
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
+  const body = await res.json().catch(() => ({}))
+  if (!res.ok || !body.user) {
     throw new Error(body.message || "Invalid email or password")
   }
-  const data: AuthResponse = await res.json()
-  return data.user
+  if (body.token) {
+    setStoredToken(body.token)
+  }
+  return body.user
 }
 
 export async function apiSignOut(): Promise<void> {
-  await apiFetch("/signout", { method: "POST" })
+  try {
+    await apiFetch("/signout", { method: "POST" })
+  } finally {
+    setStoredToken(null)
+  }
 }
 
 export async function apiGetMe(): Promise<ApiUser | null> {
   const res = await apiFetch("/me")
   if (!res.ok) return null
-  const data: { user: ApiUser } = await res.json()
-  return data.user
+  const data: { user: ApiUser } = await res.json().catch(() => ({}))
+  return data.user || null
 }
 
 // ────────────────────────── Payment ──────────────────────────
@@ -128,8 +166,8 @@ export interface ApiExecution {
 export async function apiGetExecutions(): Promise<ApiExecution[]> {
   const res = await apiFetch("/executions")
   if (!res.ok) return []
-  const data: { executions: ApiExecution[] } = await res.json()
-  return data.executions
+  const data: { executions: ApiExecution[] } = await res.json().catch(() => ({}))
+  return data.executions || []
 }
 
 // ────────────────────────── Conversations ──────────────────────────
@@ -154,8 +192,8 @@ export async function apiGetConversation(
     res = await apiFetch(`/converstion/${conversationId}`)
   }
   if (!res.ok) return null
-  const data: { conversation: ApiConversation } = await res.json()
-  return data.conversation
+  const data: { conversation: ApiConversation } = await res.json().catch(() => ({}))
+  return data.conversation || null
 }
 
 export async function apiDeleteChat(chatId: string): Promise<boolean> {
